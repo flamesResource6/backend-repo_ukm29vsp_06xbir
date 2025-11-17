@@ -12,9 +12,9 @@ Model name is converted to lowercase for the collection name:
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Literal
 
-# Example schemas (replace with your own):
+# Example schemas (retain for reference):
 
 class User(BaseModel):
     """
@@ -38,11 +38,22 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
+# Mood Tracker schemas
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+MoodValue = Literal[
+    "ecstatic",  # 😀
+    "happy",     # 🙂
+    "neutral",   # 😐
+    "sad",       # 🙁
+    "down",      # 😢
+    "angry"      # 😡
+]
+
+class MoodEntry(BaseModel):
+    """
+    Mood entries collection schema
+    Collection name: "moodentry" (lowercase of class name)
+    """
+    date: str = Field(..., description="Entry date in YYYY-MM-DD format")
+    mood: MoodValue = Field(..., description="Mood value for the day")
+    note: Optional[str] = Field(None, description="Optional notes for the day")
